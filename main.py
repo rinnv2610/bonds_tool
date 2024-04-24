@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 
-from telegram import TelegramBot
+from telegram_service import TelegramBot
 
 load_dotenv()
 
@@ -42,12 +42,15 @@ def crawl_data(chain):
         print(e)
 
 
-if __name__ == '__main__':
+def do_process():
     chains = eval(os.getenv("CHAINS"))
     message = ''
 
     for chain in chains:
         message = '\n\n'.join([message, crawl_data(chain)])
 
-    telegram_bot = TelegramBot()
-    telegram_bot.send_message_to_channel(message)
+    TelegramBot().send_message(message)
+
+#
+# if __name__ == '__main__':
+#     do_process()
