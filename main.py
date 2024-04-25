@@ -49,7 +49,8 @@ def crawl_data(chain):
             url_redirect = generator_url_to_ape_bond(current_url=url, href=href)
 
             if discount_percent:
-                result.append(dict(chain_name=chain_name, symbol=symbol, discount_percent=discount_percent.text, url_redirect=url_redirect))
+                discount_percent = str(discount_percent.text).split('%')[0]
+                result.append(dict(chain_name=chain_name, symbol=symbol, discount_percent=float(discount_percent), url_redirect=url_redirect))
 
         return result
     except Exception as e:
