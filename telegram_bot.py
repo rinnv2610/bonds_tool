@@ -10,6 +10,8 @@ class TelegramBot:
         self.chat_id = Config.CHAT_ID
 
     def send_message(self, message):
+        print("Start send_message...")
+
         url = self.send_message_to_channel_url.format(bot_token=self.bot_token)
 
         try:

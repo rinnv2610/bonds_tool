@@ -21,6 +21,7 @@ def generator_url_to_ape_bond(current_url, href):
 
 
 def crawl_data(chain):
+    print("Start crawling data...")
     with Edge(options=chrome_options) as browser:
         url = ''.join([Config.APE_BONDS_URL, str(chain)])
         browser.get(url)
@@ -52,6 +53,8 @@ def crawl_data(chain):
 
 
 def do_process():
+    print("Start doing process...")
+
     chains = eval(Config.CHAINS)
     message = "------------- APE BONDS DISCOUNT -------------"
 
