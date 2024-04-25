@@ -5,7 +5,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from telegram_bot import TelegramBot
 from config import Config
-
+from concurrent.futures import ThreadPoolExecutor
 
 chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
@@ -26,7 +26,7 @@ def crawl_data(chain):
     with Chrome(options=chrome_options) as browser:
         url = ''.join([Config.APE_BONDS_URL, str(chain)])
         browser.get(url)
-        time.sleep(5)
+        time.sleep(10)
         html = browser.page_source
 
     try:
@@ -57,10 +57,15 @@ def do_process():
     print("Start doing process...")
 
     chains = eval(Config.CHAINS)
-    message = "------------- APE BONDS DISCOUNT -------------"
+    message = "--- BONDS DISCOUNT ---"
 
-    for chain in chains:
-        message = '\n'.join([message, crawl_data(chain)])
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        # Submit tasks to the executor
+        futures = [executor.submit(crawl_data, chain) for chain in chains]
+
+        # Use result() to retrieve the result of each task
+        for future in futures:
+            message = '\n'.join([message, future.result()])
 
     # Send message to tele
     TelegramBot().send_message(message)
