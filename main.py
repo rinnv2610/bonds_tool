@@ -62,7 +62,7 @@ def process_message_raw(data):
 
     message = "*** BONDS DISCOUNT ***"
     for data in sorted_list:
-        message = '\n\n'.join([message, f'{data.get("chain_name")}  {data.get("symbol")}  {data.get("discount_percent")}  <a href="{data.get("url_redirect")}">Buy</a>'])
+        message = '\n\n'.join([message, f'{data.get("chain_name")}  {data.get("symbol")}  {data.get("discount_percent")}%  <a href="{data.get("url_redirect")}">Buy</a>'])
 
     return message
 
