@@ -1,8 +1,8 @@
 import time
 
 from bs4 import BeautifulSoup
-from selenium.webdriver import Edge
-from selenium.webdriver.edge.options import Options
+from selenium.webdriver import Chrome
+from selenium.webdriver.chrome.options import Options
 from telegram_bot import TelegramBot
 from config import Config
 
@@ -22,7 +22,7 @@ def generator_url_to_ape_bond(current_url, href):
 
 def crawl_data(chain):
     print("Start crawling data...")
-    with Edge(options=chrome_options) as browser:
+    with Chrome(options=chrome_options) as browser:
         url = ''.join([Config.APE_BONDS_URL, str(chain)])
         browser.get(url)
         time.sleep(5)
