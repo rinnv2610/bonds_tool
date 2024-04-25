@@ -33,7 +33,11 @@ def crawl_data(chain):
         soup = BeautifulSoup(html, "html.parser")
         tokens = soup.find_all("div", {"class": "css-19aks3c"})
         chain_name = soup.find("span", {"class": "css-w7gdm9"}).text
-        result = ''
+
+        if chain_name.strip() == "ETHEREUM":
+            chain_name = "ETH"
+
+        result = []
 
         for idx, token in enumerate(tokens):
             # name_token = token.find("div", {"class": "css-dlmr47"}).text
@@ -45,19 +49,28 @@ def crawl_data(chain):
             url_redirect = generator_url_to_ape_bond(current_url=url, href=href)
 
             if discount_percent:
-                data = f'{chain_name}   {symbol}    {discount_percent.text}     <a href="{url_redirect}">Buy</a>'
-                result = '\n'.join([result, data])
+                result.append(dict(chain_name=chain_name, symbol=symbol, discount_percent=discount_percent.text, url_redirect=url_redirect))
 
         return result
     except Exception as e:
         print(e)
 
 
+def process_message_raw(data):
+    sorted_list = sorted(data, key=lambda x: x['discount_percent'], reverse=True)
+
+    message = "*** BONDS DISCOUNT ***"
+    for data in sorted_list:
+        message = '\n\n'.join([message, f'{data.get("chain_name")}  {data.get("symbol")}  {data.get("discount_percent")}  <a href="{data.get("url_redirect")}">Buy</a>'])
+
+    return message
+
+
 def do_process():
     print("Start doing process...")
 
     chains = eval(Config.CHAINS)
-    message = "--- BONDS DISCOUNT ---"
+    results = []
 
     with ThreadPoolExecutor(max_workers=3) as executor:
         # Submit tasks to the executor
@@ -65,7 +78,9 @@ def do_process():
 
         # Use result() to retrieve the result of each task
         for future in futures:
-            message = '\n'.join([message, future.result()])
+            results.extend(future.result())
+
+    message = process_message_raw(results)
 
     # Send message to tele
     TelegramBot().send_message(message)
