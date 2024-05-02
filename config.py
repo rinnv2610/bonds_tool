@@ -11,3 +11,4 @@ class Config:
     CHAINS = os.environ.get('CHAINS')
     CHAT_ID = os.environ.get('CHAT_ID')
     BOT_RUN_TIME = os.environ.get('BOT_RUN_TIME')
+    APE_BONDS_API = os.environ.get('APE_BONDS_API')
