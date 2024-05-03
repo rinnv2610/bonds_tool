@@ -20,6 +20,7 @@ def process_message_raw(jsons):
     # filter list bonds not yet sold out
     bonds_valid = []
     for result in results:
+        print("result", result)
         bonds = result.get("bonds")
         bonds_valid.extend(
             list(filter(lambda x:
