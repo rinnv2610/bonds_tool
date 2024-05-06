@@ -1,3 +1,5 @@
+import gc
+
 from selenium.webdriver.chrome.options import Options
 
 from ape_bond import ApeBondService
@@ -59,6 +61,11 @@ def do_process():
 
     # Send message to tele
     TelegramBot().send_message(message)
+
+
+def clear_memory():
+    print("cron job is clearing memory")
+    gc.collect()
 
 
 if __name__ == '__main__':
