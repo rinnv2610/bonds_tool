@@ -27,8 +27,8 @@ def process_message_raw(jsons):
             list(filter(lambda x:
                         not bool(x.get("soldOut")) and
                         not bool(x.get("inactive")) and
-                        x.get("priceUsd", 0) > 0 and
-                        x.get("discount", 0) > 0, bonds
+                        (x.get("priceUsd") or 0) > 0 and
+                        (x.get("discount") or 0) > 0, bonds
                         )
                  )
         )
