@@ -55,12 +55,15 @@ def process_message_raw(jsons):
 def do_process():
     print("Start doing process...")
 
-    ape_bond_service = ApeBondService()
-    jsons = ape_bond_service.get_bonds()
-    message = process_message_raw(jsons)
+    try:
+        ape_bond_service = ApeBondService()
+        jsons = ape_bond_service.get_bonds()
+        message = process_message_raw(jsons)
 
-    # Send message to tele
-    TelegramBot().send_message(message)
+        # Send message to tele
+        TelegramBot().send_message(message)
+    except Exception as e:
+        print(e)
 
 
 def clear_memory():
